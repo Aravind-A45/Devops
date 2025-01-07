@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stone Paper Scissors - Scored</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+            background-color: black;
+            color: white;
+        }
+        button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            background-color: purple;
+            color: white;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #9932CC;
+        }
+        #result, #scores {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Stone Paper Scissors</h1>
+    <p>Choose your move:</p>
+    <button onclick="playGame('stone')">Stone</button>
+    <button onclick="playGame('paper')">Paper</button>
+    <button onclick="playGame('scissors')">Scissors</button>
+    <div id="scores"></div>
+    <div id="result"></div>
+
+    <script>
+        let playerScore = 0;
+        let computerScore = 0;
+        let roundSelections = 0;
+
+        function playGame(playerChoice) {
+            const choices = ["stone", "paper", "scissors"];
+            const computerChoice = choices[Math.floor(Math.random() * 3)];
+
+            let result = "";
+
+            // Determine the outcome
+            if (playerChoice === computerChoice) {
+                result = "It's a draw!";
+            } else if (
+                (playerChoice === "stone" && computerChoice === "scissors") ||
+                (playerChoice === "paper" && computerChoice === "stone") ||
+                (playerChoice === "scissors" && computerChoice === "paper")
+            ) {
+                result = "You win!";
+                playerScore++;
+            } else {
+                result = "Computer wins!";
+                computerScore++;
+            }
+
+            // Update selection count
+            roundSelections++;
+
+            // Update scores
+            document.getElementById("scores").innerHTML = `
+                Player Score: ${playerScore} | Computer Score: ${computerScore}
+                <br>Selections: ${roundSelections}/10
+            `;
+
+            // Check if the round is over
+            if (roundSelections === 10) {
+                let roundResult = "";
+                if (playerScore > computerScore) {
+                    roundResult = "You win the round!";
+                } else if (computerScore > playerScore) {
+                    roundResult = "Computer wins the round!";
+                } else {
+                    roundResult = "The round is a draw!";
+                }
+
+                // Show round result
+                document.getElementById("result").innerHTML = `
+                    ${roundResult}
+                    <br>Final Scores - Player: ${playerScore}, Computer: ${computerScore}
+                `;
+
+                // Reset scores and selections for the next round
+                playerScore = 0;
+                computerScore = 0;
+                roundSelections = 0;
+            } else {
+                // Show the current result
+                document.getElementById("result").innerHTML = `
+                    You chose <strong>${playerChoice}</strong>. 
+                    Computer chose <strong>${computerChoice}</strong>. 
+                    <br>${result}
+                `;
+            }
+        }
+    </script>
+</body>
+</html>
